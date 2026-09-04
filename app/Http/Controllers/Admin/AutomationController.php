@@ -3,15 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreWorkflowRequest;
+use App\Services\Automation\WorkflowService;
 use Illuminate\Http\Request;
 
 class AutomationController extends Controller
 {
-    public function index() {}
-    public function create() {}
-    public function store(Request $request) {}
-    public function show(string $id) {}
-    public function edit(string $id) {}
-    public function update(Request $request, string $id) {}
-    public function destroy(string $id) {}
+    public function __construct(protected WorkflowService $workflowService) {}
+
+    public function index(Request $request)
+    {
+        return app(WorkflowController::class)->index($request);
+    }
+
+    public function store(StoreWorkflowRequest $request)
+    {
+        return app(WorkflowController::class)->store($request);
+    }
 }

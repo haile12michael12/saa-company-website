@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Auditable;
+use App\Models\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Lead extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToCompany, Auditable;
 
     protected $fillable = [
         'company_id',
@@ -21,12 +25,16 @@ class Lead extends Model
         'notes',
     ];
 
-    public function customer()
+    protected $casts = [
+        'score' => 'integer',
+    ];
+
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
     }
 
-    public function quotes()
+    public function quotes(): HasMany
     {
         return $this->hasMany(Quote::class);
     }

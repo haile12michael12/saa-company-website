@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\Webhook;
+use App\Services\Integration\WebhookService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,11 +14,14 @@ class ProcessWebhook implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct(public mixed $webhook = null, public mixed $payload = null)
-    {
-    }
+    public function __construct(
+        public Webhook $webhook,
+        public string $event,
+        public array $payload = []
+    ) {}
 
-    public function handle(): void
+    public function handle(WebhookService $webhookService): void
     {
+        $webhookService->dispatchWebhook($this->webhook, $this->event, $this->payload);
     }
 }

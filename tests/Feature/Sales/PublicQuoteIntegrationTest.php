@@ -14,6 +14,15 @@ class PublicQuoteIntegrationTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        \App\Models\GeneralSetting::create([
+            'logo' => 'logo.png',
+            'favicon' => 'favicon.png',
+        ]);
+    }
+
     public function test_public_quote_request_creates_lead_and_itemized_quote(): void
     {
         $payload = [

@@ -15,38 +15,38 @@ class QuoteMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public mixed $quote = null)
-    {
-    }
     public function __construct(
-        public Quote $quote,
+        public mixed $quote = null,
         public ?string $customMessage = null,
         public bool $attachPdf = true
     ) {}
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Quote');
+        $quoteNumber = data_get($this->quote, 'number') ?? data_get($this->quote, 'quote_number') ?? 'N/A';
         return new Envelope(
-            subject: 'Quotation #' . $this->quote->number . ' from SAA Digital Solutions'
+            subject: 'Quotation #' . $quoteNumber . ' from SAA Digital Solutions'
         );
     }
 
     public function content(): Content
     {
+        if (view()->exists('mail.quote')) {
+            return new Content(
+                view: 'mail.quote',
+                with: [
+                    'quote' => $this->quote,
+                    'customMessage' => $this->customMessage,
+                ]
+            );
+        }
+
         return new Content(html: '<p>Your quote is ready.</p>');
-        return new Content(
-            view: 'mail.quote',
-            with: [
-                'quote' => $this->quote,
-                'customMessage' => $this->customMessage,
-            ]
-        );
     }
 
     public function attachments(): array
     {
-        if (!$this->attachPdf) {
+        if (!$this->attachPdf || !$this->quote instanceof Quote) {
             return [];
         }
 
@@ -56,7 +56,7 @@ class QuoteMail extends Mailable
 
             if (str_starts_with($pdfContent, '%PDF')) {
                 return [
-                    Attachment::fromData(fn () => $pdfContent, 'Quotation-' . $this->quote->number . '.pdf')
+                    Attachment::fromData(fn () => $pdfContent, 'Quotation-' . ($this->quote->number ?? $this->quote->quote_number) . '.pdf')
                         ->withMime('application/pdf'),
                 ];
             }

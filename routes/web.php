@@ -81,6 +81,11 @@ Route::post('/quote/view/{token}/reject', [PublicQuoteController::class, 'reject
 Route::get('/quote/view/{token}/pdf', [PublicQuoteController::class, 'downloadPdf'])->name('quotes.public.pdf');
 
 
+/** Public Contract Client Acceptance Portal */
+Route::get('/contract/view/{number}', [\App\Http\Controllers\Frontend\ContractSignController::class, 'show'])->name('contracts.public.show');
+Route::post('/contract/view/{number}/sign', [\App\Http\Controllers\Frontend\ContractSignController::class, 'sign'])->name('contracts.public.sign');
+
+
 /** Admin Routes */
 
 Route::middleware('auth')->group(function () {
@@ -184,5 +189,68 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
         Route::post('proposal-templates', [ProposalController::class, 'storeTemplate'])->name('proposal-templates.store');
         Route::put('proposal-templates/{template}', [ProposalController::class, 'updateTemplate'])->name('proposal-templates.update');
     });
+
+    /** Appointments & Booking */
+    Route::resource('appointments', \App\Http\Controllers\Admin\AppointmentController::class);
+    Route::get('appointment-slots', [\App\Http\Controllers\Admin\AppointmentController::class, 'getAvailableSlots'])->name('appointments.slots');
+
+    /** Contracts & Digital Signatures */
+    Route::resource('contracts', \App\Http\Controllers\Admin\ContractController::class);
+    Route::post('contracts/{contract}/send', [\App\Http\Controllers\Admin\ContractController::class, 'send'])->name('contracts.send');
+    Route::post('contracts/quote/{quote}', [\App\Http\Controllers\Admin\ContractController::class, 'generateFromQuote'])->name('contracts.generate-from-quote');
+    Route::post('contracts/{contract}/sign', [\App\Http\Controllers\Admin\ContractSignatureController::class, 'sign'])->name('contracts.sign');
+    Route::get('contract-signatures/{signature}/verify', [\App\Http\Controllers\Admin\ContractSignatureController::class, 'verify'])->name('contracts.signatures.verify');
+
+    /** Conversations & Messaging */
+    Route::resource('conversations', \App\Http\Controllers\Admin\ConversationController::class);
+    Route::post('conversations/{conversation}/reply', [\App\Http\Controllers\Admin\ConversationController::class, 'reply'])->name('conversations.reply');
+    Route::post('conversations/{conversation}/close', [\App\Http\Controllers\Admin\ConversationController::class, 'close'])->name('conversations.close');
+    Route::resource('messages', \App\Http\Controllers\Admin\MessageController::class)->only(['store', 'destroy']);
+
+    /** Marketing Campaigns */
+    Route::resource('campaigns', \App\Http\Controllers\Admin\CampaignController::class);
+    Route::post('campaigns/{campaign}/dispatch', [\App\Http\Controllers\Admin\CampaignController::class, 'sendCampaign'])->name('campaigns.dispatch');
+
+    /** Workflows & Automation */
+    Route::resource('workflows', \App\Http\Controllers\Admin\WorkflowController::class);
+    Route::post('workflows/{workflow}/trigger', [\App\Http\Controllers\Admin\WorkflowController::class, 'trigger'])->name('workflows.trigger');
+    Route::get('automation', [\App\Http\Controllers\Admin\AutomationController::class, 'index'])->name('automation.index');
+
+    /** Analytics & Business Intelligence */
+    Route::get('analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::post('analytics/aggregate', [\App\Http\Controllers\Admin\AnalyticsController::class, 'aggregate'])->name('analytics.aggregate');
+
+    /** Webhooks */
+    Route::resource('webhooks', \App\Http\Controllers\Admin\WebhookController::class);
+    Route::post('webhooks/{webhook}/test', [\App\Http\Controllers\Admin\WebhookController::class, 'test'])->name('webhooks.test');
+
+    /** Subscriptions */
+    Route::get('subscriptions', [\App\Http\Controllers\Admin\SubscriptionController::class, 'index'])->name('subscriptions.index');
+    Route::post('subscriptions/subscribe/{plan}', [\App\Http\Controllers\Admin\SubscriptionController::class, 'subscribe'])->name('subscriptions.subscribe');
+    Route::post('subscriptions/cancel', [\App\Http\Controllers\Admin\SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
+    Route::resource('subscription-plans', \App\Http\Controllers\Admin\SubscriptionPlanController::class);
+
+    /** Audit & Security Logs */
+    Route::get('activity-logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('activity-logs.index');
+    Route::get('activity-logs/{activityLog}', [\App\Http\Controllers\Admin\ActivityLogController::class, 'show'])->name('activity-logs.show');
+    Route::get('security-logs', [\App\Http\Controllers\Admin\SecurityLogController::class, 'index'])->name('security-logs.index');
+    Route::get('security-logs/{securityLog}', [\App\Http\Controllers\Admin\SecurityLogController::class, 'show'])->name('security-logs.show');
+
+    /** Backups */
+    Route::get('backups', [\App\Http\Controllers\Admin\BackupController::class, 'index'])->name('backups.index');
+    Route::post('backups', [\App\Http\Controllers\Admin\BackupController::class, 'store'])->name('backups.store');
+    Route::get('backups/download/{filename}', [\App\Http\Controllers\Admin\BackupController::class, 'download'])->name('backups.download');
+    Route::delete('backups/{filename}', [\App\Http\Controllers\Admin\BackupController::class, 'destroy'])->name('backups.destroy');
+
+    /** AI Assistant */
+    Route::get('ai-insights', [\App\Http\Controllers\Admin\AIController::class, 'index'])->name('ai.index');
+    Route::post('ai-insights/chat', [\App\Http\Controllers\Admin\AIController::class, 'chat'])->name('ai.chat');
+    Route::post('ai-insights/lead-score/{lead}', [\App\Http\Controllers\Admin\AIController::class, 'scoreLead'])->name('ai.lead-score');
+    Route::post('ai-insights/quote-summary/{quote}', [\App\Http\Controllers\Admin\AIController::class, 'generateProposalSummary'])->name('ai.quote-summary');
+
+    /** Notifications */
+    Route::get('notifications', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/read-all', [\App\Http\Controllers\Admin\NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+    Route::post('notifications/{id}/read', [\App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])->name('notifications.read');
 
 });

@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Auditable;
+use App\Models\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToCompany, Auditable;
 
     protected $fillable = [
         'company_id',
@@ -19,28 +23,48 @@ class Customer extends Model
         'status',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function leads()
+    public function leads(): HasMany
     {
         return $this->hasMany(Lead::class);
     }
 
-    public function quotes()
+    public function quotes(): HasMany
     {
         return $this->hasMany(Quote::class);
     }
 
-    public function projects()
+    public function projects(): HasMany
     {
         return $this->hasMany(Project::class);
     }
 
-    public function proposals()
+    public function proposals(): HasMany
     {
         return $this->hasMany(Proposal::class);
+    }
+
+    public function contracts(): HasMany
+    {
+        return $this->hasMany(Contract::class);
+    }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function conversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class);
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
     }
 }

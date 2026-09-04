@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\Workflow;
+use App\Services\Automation\WorkflowService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,11 +14,13 @@ class ProcessWorkflow implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct(public mixed $workflow = null, public mixed $payload = null)
-    {
-    }
+    public function __construct(
+        public Workflow $workflow,
+        public array $payload = []
+    ) {}
 
-    public function handle(): void
+    public function handle(WorkflowService $service): void
     {
+        $service->executeWorkflow($this->workflow, $this->payload);
     }
 }

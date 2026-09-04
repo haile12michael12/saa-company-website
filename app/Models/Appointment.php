@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Auditable;
+use App\Models\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Appointment extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToCompany, Auditable;
 
     protected $fillable = [
         'company_id',
@@ -25,4 +28,14 @@ class Appointment extends Model
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
     ];
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
