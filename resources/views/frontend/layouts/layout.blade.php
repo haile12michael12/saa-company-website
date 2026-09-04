@@ -12,6 +12,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{@$seoSetting->description}}">
     <meta name="keywords" content="{{@$seoSetting->keywords}}">
+	<title>{{@$seoSetting->title}}</title>
+	<link rel="shortcut icon" type="image/ico" href="{{asset($generalSetting->favicon)}}" />
 	<title>{{@$seoSetting->title ?? config('app.name', 'SAA Company')}}</title>
 	<link rel="shortcut icon" type="image/ico" href="{{asset(@$generalSetting->favicon ?? 'frontend/assets/images/favicon.ico')}}" />
 	<link rel="stylesheet" href="{{asset('frontend/assets/css/bootstrap.min.css')}}">

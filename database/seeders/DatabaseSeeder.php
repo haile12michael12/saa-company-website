@@ -38,6 +38,14 @@ class DatabaseSeeder extends Seeder
         \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
 
         // Company
+        $companyId = DB::table('companies')->insertGetId([
+            'name' => 'SAA Digital Solutions',
+            'slug' => 'saa-digital-solutions',
+            'email' => 'contact@saacompany.com',
+            'phone' => '+1 (555) 234-5678',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
         $company = DB::table('companies')->where('slug', 'saa-digital-solutions')->first();
         if ($company) {
             $companyId = $company->id;

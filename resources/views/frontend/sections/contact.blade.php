@@ -3,8 +3,10 @@
         <div class="row">
             <div class="col-lg-6 offset-lg-3 text-center">
                 <div class="section-title">
+                    <h3 class="title">{{$contactTitle->title}}</h3>
                     <h3 class="title">{{@$contactTitle->title ?? 'Get In Touch'}}</h3>
                     <div class="desc">
+                        <p>{{$contactTitle->sub_title}}</p>
                         <p>{{@$contactTitle->sub_title ?? 'Have questions or want to discuss a project? Reach out to us directly.'}}</p>
                     </div>
                 </div>

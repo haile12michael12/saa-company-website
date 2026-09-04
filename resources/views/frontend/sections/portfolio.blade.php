@@ -3,8 +3,10 @@
         <div class="row align-items-end mb-4">
             <div class="col-md-8">
                 <div class="section-title mb-0">
+                    <h3 class="title">{{$portfolioTitle->title ?? 'Featured Portfolio'}}</h3>
                     <h3 class="title">{{@$portfolioTitle->title ?? 'Featured Portfolio'}}</h3>
                     <div class="desc">
+                        <p>{!! $portfolioTitle->sub_title ?? 'Explore our recent success stories' !!}</p>
                         <p>{!! @$portfolioTitle->sub_title ?? 'Explore our recent success stories' !!}</p>
                     </div>
                 </div>
