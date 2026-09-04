@@ -5,10 +5,12 @@ namespace Tests\Feature;
 use App\Models\Blog;
 use App\Models\PortfolioItem;
 use App\Models\Service;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PublicFrontendRoutesTest extends TestCase
 {
+    use RefreshDatabase;
     protected function setUp(): void
     {
         parent::setUp();

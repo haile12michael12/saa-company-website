@@ -298,18 +298,42 @@ class HomeController extends Controller
 
         // Generate Quote Reference Number
         $quoteNumber = 'QT-' . date('Y') . '-' . strtoupper(Str::random(6));
+        $title = ($validated['project_type'] ?? 'Project') . ' - ' . ($validated['service_id'] ?? 'Custom Digital Solution');
+
+        // Estimate initial unit price from budget range if applicable
+        $estimatedPrice = 0.00;
+        if (preg_match('/\$?([0-9]+(?:,[0-9]{3})*)/', $validated['budget_range'], $matches)) {
+            $estimatedPrice = (float) str_replace(',', '', $matches[1]);
+        }
 
         // Create Quote Record
         $quote = Quote::create([
             'lead_id' => $lead->id,
             'number' => $quoteNumber,
+            'title' => $title,
             'status' => 'draft',
             'subtotal' => 0.00,
+            'subtotal' => $estimatedPrice,
             'tax' => 0.00,
             'total' => 0.00,
+            'total' => $estimatedPrice,
             'valid_until' => Carbon::now()->addDays(30),
             'notes' => "Selected Service: " . ($validated['service_id'] ?? 'Custom') . "\nRequirements: {$validated['description']}",
+            'notes' => "Service: " . ($validated['service_id'] ?? 'Custom') . "\nProject Type: {$validated['project_type']}\nBudget Range: {$validated['budget_range']}\nTimeline: {$validated['timeline']}\n\nRequirements:\n{$validated['description']}",
+            'terms' => "1. 50% upfront upon project commencement, 50% on milestone completion.\n2. Standard 30 days warranty included on all deliverables.\n3. Detailed sprint delivery schedule will be attached to formal contract.",
+            'token' => Str::random(40),
         ]);
+
+        // Create initial QuoteItem
+        \App\Models\QuoteItem::create([
+            'quote_id' => $quote->id,
+            'description' => $title,
+            'quantity' => 1,
+            'unit_price' => $estimatedPrice,
+            'total' => $estimatedPrice,
+        ]);
+
+        $quote->recalculateTotals(true);
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([

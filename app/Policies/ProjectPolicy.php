@@ -2,42 +2,46 @@
 
 namespace App\Policies;
 
+use App\Models\Project;
 use App\Models\User;
 
 class ProjectPolicy
 {
-    public function viewAny(User $user): bool
+    protected function matchesCompany(User $user, ?Project $project = null): bool
     {
-        return false;
+        if (empty($user->company_id)) {
+            return true;
+        }
+
+        if ($project && !empty($project->company_id)) {
+            return $user->company_id === $project->company_id;
+        }
+
+        return true;
     }
 
-    public function view(User $user, mixed $project): bool
+    public function viewAny(User $user): bool
     {
-        return false;
+        return true;
+    }
+
+    public function view(User $user, Project $project): bool
+    {
+        return $this->matchesCompany($user, $project);
     }
 
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
-    public function update(User $user, mixed $project): bool
+    public function update(User $user, Project $project): bool
     {
-        return false;
+        return $this->matchesCompany($user, $project);
     }
 
-    public function delete(User $user, mixed $project): bool
+    public function delete(User $user, Project $project): bool
     {
-        return false;
-    }
-
-    public function restore(User $user, mixed $project): bool
-    {
-        return false;
-    }
-
-    public function forceDelete(User $user, mixed $project): bool
-    {
-        return false;
+        return $this->matchesCompany($user, $project);
     }
 }

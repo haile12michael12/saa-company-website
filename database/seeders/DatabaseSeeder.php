@@ -504,6 +504,27 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
+        // Proposal Templates
+        \App\Models\ProposalTemplate::firstOrCreate(
+            ['name' => 'Custom Web Application & SaaS Engineering Proposal'],
+            [
+                'subject' => 'Project Proposal: Engineering & Deployment for {{client_company}}',
+                'category' => 'Web Development',
+                'content' => "## Executive Summary\nSAA Digital Solutions is delighted to submit this technical proposal for **{{client_name}}** at **{{client_company}}**.\n\nOur engineering team has thoroughly reviewed your specifications and formulated a battle-tested roadmap designed to deliver a scalable, secure, and performant web platform.\n\n## Scope of Work & Deliverables\nBelow is the agreed itemized breakdown for Quotation **{{quote_number}}**:\n\n{{items_table}}\n\n## Commercial Terms & Investment\n- **Subtotal:** {{subtotal}}\n- **Discount:** {{discount_amount}}\n- **Tax:** {{tax_amount}}\n- **Grand Total Investment:** {{total_amount}}\n- **Quotation Validity:** {{valid_until}}\n\n## Standard Terms\n{{terms}}\n\nWe look forward to executing this milestone with your team.",
+                'is_active' => true,
+            ]
+        );
+
+        \App\Models\ProposalTemplate::firstOrCreate(
+            ['name' => 'Mobile App & Cloud Architecture Proposal'],
+            [
+                'subject' => 'Mobile Engineering Proposal for {{client_company}}',
+                'category' => 'Mobile Applications',
+                'content' => "## Executive Overview\nThank you for exploring partnership opportunities with SAA Digital Solutions. We are excited to present our mobile engineering proposal for {{client_company}} under Quotation {{quote_number}}.\n\n## Technical Architecture & Deliverables\n{{items_table}}\n\n## Investment Summary\n- Total Investment: {{total_amount}}\n- Valid Until: {{valid_until}}\n\n{{terms}}",
+                'is_active' => true,
+            ]
+        );
+
         \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
     }
 }

@@ -20,4 +20,14 @@ class Lead extends Model
         'score',
         'notes',
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function quotes()
+    {
+        return $this->hasMany(Quote::class);
+    }
 }

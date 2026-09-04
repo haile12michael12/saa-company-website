@@ -2,42 +2,46 @@
 
 namespace App\Policies;
 
+use App\Models\Customer;
 use App\Models\User;
 
 class CustomerPolicy
 {
-    public function viewAny(User $user): bool
+    protected function matchesCompany(User $user, ?Customer $customer = null): bool
     {
-        return false;
+        if (empty($user->company_id)) {
+            return true;
+        }
+
+        if ($customer && !empty($customer->company_id)) {
+            return $user->company_id === $customer->company_id;
+        }
+
+        return true;
     }
 
-    public function view(User $user, mixed $customer): bool
+    public function viewAny(User $user): bool
     {
-        return false;
+        return true;
+    }
+
+    public function view(User $user, Customer $customer): bool
+    {
+        return $this->matchesCompany($user, $customer);
     }
 
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
-    public function update(User $user, mixed $customer): bool
+    public function update(User $user, Customer $customer): bool
     {
-        return false;
+        return $this->matchesCompany($user, $customer);
     }
 
-    public function delete(User $user, mixed $customer): bool
+    public function delete(User $user, Customer $customer): bool
     {
-        return false;
-    }
-
-    public function restore(User $user, mixed $customer): bool
-    {
-        return false;
-    }
-
-    public function forceDelete(User $user, mixed $customer): bool
-    {
-        return false;
+        return $this->matchesCompany($user, $customer);
     }
 }

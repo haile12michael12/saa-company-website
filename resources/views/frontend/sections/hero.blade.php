@@ -34,6 +34,7 @@
             foreach($typerTitles as $title){
                 $titles[] = $title->title;
             if(isset($typerTitles)){
+            if(isset($typerTitles) && count($typerTitles) > 0){
                 foreach($typerTitles as $title){
                     $titles[] = $title->title;
                 }

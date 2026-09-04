@@ -2,42 +2,76 @@
 
 namespace App\Policies;
 
+use App\Models\Quote;
 use App\Models\User;
 
 class QuotePolicy
 {
-    public function viewAny(User $user): bool
+    protected function matchesCompany(User $user, ?Quote $quote = null): bool
     {
-        return false;
+        if (empty($user->company_id)) {
+            return true;
+        }
+
+        if ($quote && !empty($quote->company_id)) {
+            return $user->company_id === $quote->company_id;
+        }
+
+        return true;
     }
 
-    public function view(User $user, mixed $quote): bool
+    public function viewAny(User $user): bool
     {
-        return false;
+        return true;
+    }
+
+    public function view(User $user, Quote $quote): bool
+    {
+        return $this->matchesCompany($user, $quote);
     }
 
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
-    public function update(User $user, mixed $quote): bool
+    public function update(User $user, Quote $quote): bool
     {
-        return false;
+        return $this->matchesCompany($user, $quote);
     }
 
-    public function delete(User $user, mixed $quote): bool
+    public function delete(User $user, Quote $quote): bool
     {
-        return false;
+        return $this->matchesCompany($user, $quote);
     }
 
-    public function restore(User $user, mixed $quote): bool
+    public function approve(User $user, Quote $quote): bool
     {
-        return false;
+        return $this->matchesCompany($user, $quote) && $quote->canBeApproved();
     }
 
-    public function forceDelete(User $user, mixed $quote): bool
+    public function sendEmail(User $user, Quote $quote): bool
     {
-        return false;
+        return $this->matchesCompany($user, $quote);
+    }
+
+    public function accept(User $user, Quote $quote): bool
+    {
+        return $this->matchesCompany($user, $quote);
+    }
+
+    public function reject(User $user, Quote $quote): bool
+    {
+        return $this->matchesCompany($user, $quote);
+    }
+
+    public function convertToCustomer(User $user, Quote $quote): bool
+    {
+        return $this->matchesCompany($user, $quote) && $quote->canBeConvertedToCustomer();
+    }
+
+    public function convertToProject(User $user, Quote $quote): bool
+    {
+        return $this->matchesCompany($user, $quote) && $quote->canBeConvertedToProject();
     }
 }

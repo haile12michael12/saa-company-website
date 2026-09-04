@@ -40,6 +40,19 @@
         <li class="nav-item {{setSidebarActive(['dashboard'])}}">
           <a href="{{route('dashboard')}}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
         </li>
+        <li class="menu-header">Sales & Revenue</li>
+        <li class="nav-item dropdown {{setSidebarActive([
+            'admin.sales.*',
+            'admin.quotes.*',
+            'admin.proposals.*',
+            ])}}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-file-invoice-dollar"></i> <span>Sales</span></a>
+            <ul class="dropdown-menu" style="display: none;">
+              <li class="{{setSidebarActive(['admin.sales.*'])}}"><a class="nav-link" href="{{route('admin.sales.index')}}">Sales Dashboard</a></li>
+              <li class="{{setSidebarActive(['admin.quotes.*'])}}"><a class="nav-link" href="{{route('admin.quotes.index')}}">Quotations</a></li>
+              <li class="{{setSidebarActive(['admin.proposals.*'])}}"><a class="nav-link" href="{{route('admin.proposals.index')}}">Proposals & Templates</a></li>
+            </ul>
+        </li>
         <li class="menu-header">Sections</li>
         <li class="nav-item dropdown {{setSidebarActive([
             'admin.typer-title.*',
