@@ -44,13 +44,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/** Frontend Routes */
+/** Frontend Public Routes (Browse without authentication) */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/services', [HomeController::class, 'services'])->name('services.index');
+Route::get('/services/{service}', [HomeController::class, 'showService'])->name('services.show');
+Route::get('/portfolio', [HomeController::class, 'portfolio'])->name('portfolio.index');
+Route::get('/portfolio/{portfolio}', [HomeController::class, 'showPortfolio'])->name('portfolio.show');
 Route::get('portfolio-details/{id}', [HomeController::class, 'showPortfolio'])->name('show.portfolio');
-Route::get('blog-details/{id}', [HomeController::class, 'showBlog'])->name('show.blog');
+Route::get('/blog', [HomeController::class, 'blog'])->name('blog.index');
 Route::get('blogs', [HomeController::class, 'blog'])->name('blog');
-Route::post('contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/blog/{slug}', [HomeController::class, 'showBlog'])->name('blog.show');
+Route::get('blog-details/{id}', [HomeController::class, 'showBlog'])->name('show.blog');
+Route::get('/contact', [HomeController::class, 'contactPage'])->name('contact.page');
+Route::post('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/quote-request', [HomeController::class, 'quoteRequest'])->name('quote.request');
+Route::post('/quote-request', [HomeController::class, 'submitQuoteRequest'])->name('quote.submit');
+Route::get('/book-consultation', [HomeController::class, 'bookConsultation'])->name('consultation.book');
+Route::post('/book-consultation', [HomeController::class, 'submitBookConsultation'])->name('consultation.submit');
+Route::get('/faq', [HomeController::class, 'faq'])->name('faq.index');
+Route::get('/reviews', [HomeController::class, 'reviews'])->name('reviews.index');
+Route::post('/reviews', [HomeController::class, 'submitReview'])->name('reviews.submit');
+Route::get('/ai-assistant', [HomeController::class, 'aiAssistant'])->name('ai.assistant');
+Route::post('/ai-assistant/chat', [HomeController::class, 'aiAssistantChat'])->name('ai.assistant.chat');
 Route::get('resume/download', [AboutController::class, 'resumeDownload'])->name('resume.download');
 
 

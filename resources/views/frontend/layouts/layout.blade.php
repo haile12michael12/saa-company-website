@@ -12,8 +12,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{@$seoSetting->description}}">
     <meta name="keywords" content="{{@$seoSetting->keywords}}">
-	<title>{{@$seoSetting->title}}</title>
-	<link rel="shortcut icon" type="image/ico" href="{{asset($generalSetting->favicon)}}" />
+	<title>{{@$seoSetting->title ?? config('app.name', 'SAA Company')}}</title>
+	<link rel="shortcut icon" type="image/ico" href="{{asset(@$generalSetting->favicon ?? 'frontend/assets/images/favicon.ico')}}" />
 	<link rel="stylesheet" href="{{asset('frontend/assets/css/bootstrap.min.css')}}">
 	<link rel="stylesheet" href="{{asset('frontend/assets/css/normalize.css')}}">
 	<link rel="stylesheet" href="{{asset('frontend/assets/css/style-plugin-collection.css')}}">
@@ -47,6 +47,19 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script src="{{asset('frontend/assets/js/vendor/modernizr.js')}}"></script>
 	<script src="{{asset('frontend/assets/js/main.js')}}"></script>
+    <script>
+        @if (session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+        @if (session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                toastr.error("{{ $error }}");
+            @endforeach
+        @endif
+    </script>
     @stack('scripts')
 </body>
 

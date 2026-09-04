@@ -5,25 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Quote extends Model
+class Lead extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'company_id',
         'customer_id',
-        'lead_id',
-        'number',
+        'name',
+        'email',
+        'phone',
+        'source',
         'status',
-        'subtotal',
-        'tax',
-        'total',
-        'valid_until',
+        'score',
         'notes',
     ];
-
-    public function lead()
-    {
-        return $this->belongsTo(Lead::class);
-    }
 }
