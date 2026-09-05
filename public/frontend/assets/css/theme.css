@@ -1,3 +1,48 @@
+.topbar-area {
+    background: #161616;
+    color: #ffffff;
+    font-size: 13px;
+    padding: 9px 0;
+}
+
+.topbar-content {
+    gap: 10px 24px;
+}
+
+.topbar-contact,
+.topbar-social {
+    gap: 18px;
+}
+
+.topbar-area a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.topbar-area a:hover {
+    color: #ff885e;
+}
+
+.topbar-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+}
+
+@media (max-width: 575px) {
+    .topbar-content {
+        justify-content: center !important;
+    }
+
+    .topbar-contact,
+    .topbar-social {
+        justify-content: center;
+        gap: 12px;
+    }
+}
+
 body {
     overflow-x: hidden;
 }

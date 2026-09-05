@@ -29,6 +29,7 @@
 		<img src="{{asset('frontend/assets/images/preloader.gif')}}" alt="">
 	</div>
 
+    @include('frontend.layouts.topbar')
     @include('frontend.layouts.navbar')
 
 	<div class="main_wrapper" data-bs-spy="scroll" data-bs-target="#main_menu_area" data-bs-root-margin="0px 0px -40%"
